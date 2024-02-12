@@ -3,8 +3,9 @@ import React from 'react'
 // import { useRouter } from 'next/router';
 import { useRouter } from 'next/navigation'
 import { useChat,Message } from "ai/react"
+import { FaClipboardList } from "react-icons/fa";
 export default function ChatComponents() {
-	const {input,handleInputChange,handleSubmit,isLoading,messages} =useChat();
+	const {input,handleInputChange,handleSubmit,isLoading,messages} = useChat();
 	console.log(messages);
 	console.log(input);
 	const router = useRouter()
@@ -12,15 +13,36 @@ export default function ChatComponents() {
   return (
 	  <div className='mt-5 '>
 		{messages.map((message)=>{
+
+			// Untuk mencopy text
+			const copyToClipboard = (text: string) => {
+
+				const el = document.createElement('textarea');
+				
+				el.value = text;
+				
+				document.body.appendChild(el);
+				
+				el.select();
+				
+				document.execCommand('copy');
+				
+				document.body.removeChild(el);
+				
+				alert('Jawaban Telah Disalin Ke Clipboard!')
+				}
+
 			return (
 				// <div className='bg-yellow-400 p-1 max-h-96'>
 				<div className='' key={message.id}>
 					{
 						message.role === "assistant"?
+						<div className='flex justify-between '>
 						<h3 className='text-lg font-semibold mt-2 '>FIQRO GAPTECH-3.5 TURBO</h3>
+						<button className="mr-5" onClick={() => copyToClipboard(message.content)}><FaClipboardList className='h-7 '/></button>
+						</div>
 						:
 						<h3 className="text-lg font-semibold mt-2 ">PERTANYAAN KELEN</h3>
-
 					}
 					
 						{
@@ -34,6 +56,9 @@ export default function ChatComponents() {
 							}
 							)
 						}
+						{/* Tombol Salin */}
+					<div className='flex justify-end m-0'>
+					</div>
 					
 				</div>
 				// </div>
@@ -43,9 +68,9 @@ export default function ChatComponents() {
 
 		  <div>
 			  <form action="" className='mt-12 ' onSubmit={handleSubmit}>
-				  <label className="sr-only">Tanya Apapun,Asal Jangan 18+</label>
+				  <label className="sr-only">Silahkan Tulis  Pertanyaan Anda </label>
 				  <div className="flex items-center px-3 py-2 rounded-lg bg-gray-50 dark:bg-gray-700">
-					  <input autoFocus type="text" id="chat" className="block mx-4 p-2.5 w-full  text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-md" placeholder="Tanya Apapun,Asal Jangan 18+"
+					  <input autoFocus type="text" id="chat" className="block mx-4 p-2.5 w-full  text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 text-md" placeholder="Silahkan Tulis Pertanyaan Anda "
 						  value={input}
 						  onChange={handleInputChange}
 					  ></input>
